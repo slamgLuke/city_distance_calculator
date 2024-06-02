@@ -27,16 +27,10 @@ pub fn get_coordinates(city: &City) -> Result<Coordinates, String> {
     }
 }
 
-pub fn city_from_type(city_type: &CityType, name: String) -> City {
+pub fn city_from_type(city_type: &CityType, name: &str) -> City {
     match city_type {
-        CityType::API => City::API(CityAPI {
-            name,
-            api_key: API_KEY.to_string(),
-        }),
-        CityType::CSV => City::CSV(CityCSV {
-            file_path: CSV_FILE.to_string(),
-            name,
-        }),
-        CityType::Mock => City::Mock(CityMock { name }),
+        CityType::API => City::API(CityAPI::new(name.to_owned(), API_KEY.to_string())),
+        CityType::CSV => City::CSV(CityCSV::new(name.to_owned(), CSV_FILE.to_string())),
+        CityType::Mock => City::Mock(CityMock::new(name.to_owned())),
     }
 }
