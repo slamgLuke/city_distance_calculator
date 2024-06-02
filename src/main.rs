@@ -1,4 +1,7 @@
 mod city;
+mod city_api;
+mod city_csv;
+mod city_mock;
 mod coords;
 
 use city::*;
