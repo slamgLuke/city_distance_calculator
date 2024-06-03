@@ -1,14 +1,19 @@
+// Application to get coordinates and distance of cities using API, CSV or Mock data
+// Authors: Lucas Carranza, Adrian Céspedes
+
 mod city;
 mod city_api;
 mod city_csv;
 mod city_mock;
 mod coords;
+mod distance;
 
 use city::*;
 use city_api::*;
 use city_csv::*;
 use city_mock::*;
-use coords::*;
+use coords::Coordinates;
+use distance::distance_km;
 use std::io;
 use std::str::FromStr;
 
