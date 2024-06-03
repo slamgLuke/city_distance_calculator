@@ -38,27 +38,29 @@ impl HasCoords for CityAPI {
             }
             let body = response.unwrap().text().await;
             if let Err(_) = body {
-                return Err("Error fetching response".to_string());
+                return Err("Received invalid response".to_string());
             }
             let json: Result<Value, serde_json::Error> =
                 serde_json::from_str(body.unwrap().as_str());
             if let Err(_) = json {
                 return Err("Error parsing json".to_string());
             }
-            let json: Value = json.unwrap()[0].clone();
-            // dbg!(&json);
-            let (latitude_str, longitude_str) = (json["lat"].as_str(), json["lon"].as_str());
-            if latitude_str.is_none() || longitude_str.is_none() {
-                return Err("Error parsing json".to_string());
+            // check every item in the json array until we find the coordinates
+            for item in json.as_ref().unwrap().as_array().unwrap() {
+                let (latitude_str, longitude_str) = (item["lat"].as_str(), item["lon"].as_str());
+                if latitude_str.is_none() || longitude_str.is_none() {
+                    continue;
+                }
+                let (latitude, longitude) = (
+                    latitude_str.unwrap().parse::<f64>().ok(),
+                    longitude_str.unwrap().parse::<f64>().ok(),
+                );
+                return Ok(Coordinates {
+                    latitude: latitude.unwrap(),
+                    longitude: longitude.unwrap(),
+                });
             }
-            let (latitude, longitude) = (
-                latitude_str.unwrap().parse::<f64>().ok(),
-                longitude_str.unwrap().parse::<f64>().ok(),
-            );
-            Ok(Coordinates {
-                latitude: latitude.unwrap(),
-                longtude: longitude.unwrap(),
-            })
+            Err("Coordinates not found in response".to_string())
         })
     }
 }

@@ -20,7 +20,7 @@ impl HasCoords for CityCSV {
     fn get_coordinates(&self) -> Result<Coordinates, String> {
         let reader = Reader::from_path(&self.file_path);
         if reader.is_err() {
-            return Err("Error reading csv".to_string());
+            return Err("Error reading csv file".to_string());
         }
         let mut reader = reader.unwrap();
         for result in reader.records() {
@@ -28,7 +28,7 @@ impl HasCoords for CityCSV {
             if record[0].to_lowercase() == self.name.to_lowercase() {
                 return Ok(Coordinates {
                     latitude: record[2].parse::<f64>().unwrap(),
-                    longtude: record[3].parse::<f64>().unwrap(),
+                    longitude: record[3].parse::<f64>().unwrap(),
                 });
             }
         }

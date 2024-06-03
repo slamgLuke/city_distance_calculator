@@ -3,6 +3,7 @@ use crate::city_csv::{CityCSV, CSV_FILE};
 use crate::city_mock::CityMock;
 use crate::coords::Coordinates;
 
+// Polymorphic City trait
 pub trait HasCoords {
     fn get_coordinates(&self) -> Result<Coordinates, String>;
 }
