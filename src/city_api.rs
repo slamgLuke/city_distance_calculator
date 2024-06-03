@@ -1,12 +1,9 @@
-use crate::city::HasCoords;
+use crate::city::City;
 use crate::coords::Coordinates;
 
 use reqwest::Client;
 use serde_json::Value;
 use tokio::runtime::Runtime;
-
-
-pub const API_KEY: &'static str = "665bbdc3a5089409370770euy935171";
 
 pub struct CityAPI {
     pub name: String,
@@ -19,7 +16,7 @@ impl CityAPI {
     }
 }
 
-impl HasCoords for CityAPI {
+impl City for CityAPI {
     fn get_coordinates(&self) -> Result<Coordinates, String> {
         let rt = Runtime::new().unwrap();
         rt.block_on(async {

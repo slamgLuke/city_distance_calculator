@@ -5,9 +5,45 @@ mod city_mock;
 mod coords;
 
 use city::*;
+use city_api::*;
+use city_csv::*;
+use city_mock::*;
 use coords::*;
 use std::io;
 use std::str::FromStr;
+
+const API_KEY: &'static str = "665bbdc3a5089409370770euy935171";
+const CSV_FILE: &'static str = "data/worldcities.csv";
+
+// City Types Enum
+enum CityType {
+    API,
+    CSV,
+    Mock,
+}
+
+// City Interface
+enum CityInterface {
+    API(CityAPI),
+    CSV(CityCSV),
+    Mock(CityMock),
+}
+
+fn get_coordinates(city: &CityInterface) -> Result<Coordinates, String> {
+    match city {
+        CityInterface::API(city) => city.get_coordinates(),
+        CityInterface::CSV(city) => city.get_coordinates(),
+        CityInterface::Mock(city) => city.get_coordinates(),
+    }
+}
+
+fn city_from_type(city_type: &CityType, name: &str) -> CityInterface {
+    match city_type {
+        CityType::API => CityInterface::API(CityAPI::new(name.to_owned(), API_KEY.to_string())),
+        CityType::CSV => CityInterface::CSV(CityCSV::new(name.to_owned(), CSV_FILE.to_string())),
+        CityType::Mock => CityInterface::Mock(CityMock::new(name.to_owned())),
+    }
+}
 
 fn handle_input<T: FromStr>(prompt: Option<&str>) -> Result<T, T::Err> {
     if prompt.is_some() {
@@ -39,6 +75,7 @@ fn get_method() -> CityType {
 
 fn main() {
     loop {
+        // Get method to get city coordinates
         let method: CityType = get_method();
 
         // Read city names from user
@@ -46,8 +83,8 @@ fn main() {
         let city2_name = handle_input::<String>(Some("Enter second city name:")).unwrap();
 
         // Initialize city objects
-        let city1 = city_from_type(&method, city1_name.as_str());
-        let city2 = city_from_type(&method, city2_name.as_str());
+        let city1: CityInterface = city_from_type(&method, city1_name.as_str());
+        let city2: CityInterface = city_from_type(&method, city2_name.as_str());
 
         // Get coordinates for cities
         let coords1 = get_coordinates(&city1);
@@ -56,11 +93,11 @@ fn main() {
         match (coords1, coords2) {
             (Ok(coords1), Ok(coords2)) => {
                 println!(
-                    "{} coordinates: {}, {}",
+                    "{} coordinates: {:.5}, {:.5}",
                     &city1_name, coords1.latitude, coords1.longitude
                 );
                 println!(
-                    "{} coordinates: {}, {}",
+                    "{} coordinates: {:.5}, {:.5}",
                     &city2_name, coords2.latitude, coords2.longitude
                 );
                 println!(
@@ -70,7 +107,9 @@ fn main() {
             }
             (Err(e), Ok(_)) => println!("Error getting coordinates for {}: {}", city1_name, e),
             (Ok(_), Err(e)) => println!("Error getting coordinates for {}: {}", city2_name, e),
-            (Err(e1), Err(e2)) => println!("Error getting coordinates for both cities: {}, {}", e1, e2),
+            (Err(e1), Err(e2)) => {
+                println!("Error getting coordinates for both cities: {}, {}", e1, e2)
+            }
         }
     }
 }

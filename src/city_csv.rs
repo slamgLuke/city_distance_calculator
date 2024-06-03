@@ -1,9 +1,7 @@
 use crate::coords::Coordinates;
-use crate::city::HasCoords;
+use crate::city::City;
 
 use csv::Reader;
-
-pub const CSV_FILE: &'static str = "data/worldcities.csv";
 
 pub struct CityCSV {
     pub file_path: String,
@@ -16,7 +14,7 @@ impl CityCSV {
     }
 }
 
-impl HasCoords for CityCSV {
+impl City for CityCSV {
     fn get_coordinates(&self) -> Result<Coordinates, String> {
         let reader = Reader::from_path(&self.file_path);
         if reader.is_err() {

@@ -1,4 +1,4 @@
-use crate::city::HasCoords;
+use crate::city::City;
 use crate::coords::Coordinates;
 
 use rand::Rng;
@@ -13,7 +13,7 @@ impl CityMock {
     }
 }
 
-impl HasCoords for CityMock {
+impl City for CityMock {
     fn get_coordinates(&self) -> Result<Coordinates, String> {
         Ok(Coordinates {
             latitude: rand::thread_rng().gen_range(-90.0..90.0),
