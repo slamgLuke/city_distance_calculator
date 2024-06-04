@@ -92,6 +92,9 @@ impl MyApp {
 
             self.output = (get_name(shortest_1), get_name(shortest_2));
             self.distance = format!("{:.5} km", shortest_dist);
+        } else {
+            self.output = (String::new(), String::new());
+            self.distance = String::from("Error...");
         }
     }
 }
