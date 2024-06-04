@@ -9,6 +9,7 @@ mod city_mock;
 mod coords;
 mod distance;
 mod gui;
+mod three_point;
 
 use gui::MyApp;
 

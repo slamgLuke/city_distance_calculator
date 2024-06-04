@@ -38,3 +38,10 @@ pub fn city_from_type(city_type: &CityType, name: &str) -> CityInterface {
     }
 }
 
+pub fn get_name(city: &CityInterface) -> String {
+    match city {
+        CityInterface::API(city) => city.name.clone(),
+        CityInterface::CSV(city) => city.name.clone(),
+        CityInterface::Mock(city) => city.name.clone(),
+    }
+}
