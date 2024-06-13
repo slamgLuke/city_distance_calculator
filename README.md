@@ -14,6 +14,14 @@
 
 ## Tests
 
+#### How to test:
+
+```bash
+cargo test
+```
+
+#### Test list:
+
 | Test Case        | Precondition | Test Steps                                                                                                                                    | Test Data                                                                                                                                    | Expected Results             |
 |------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|------------------------------|
 | `test_1`         | La función es válida      | 1. Crear coordenadas `a` (0.0, 0.0) y `b` (1.0, 1.0). <br> 2. Llamar a `distance_km(&a, &b)` y redondear el resultado.                        | `a: Coordinates { latitude: 0.0, longitude: 0.0 }` <br> `b: Coordinates { latitude: 1.0, longitude: 1.0 }`                                    | Resultado redondeado es 157 km. |
